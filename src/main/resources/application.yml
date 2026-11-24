@@ -1,6 +1,6 @@
 spring:
   application:
-    name: uptime-webhook-monitor
+    name: webhook-alerts
 
   threads:
     virtual:
