@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -63,6 +64,32 @@ public class Monitor {
     public void resume() {
         this.active = true;
         this.nextCheckAt = Instant.now();
+    }
+
+    public void scheduleNextCheck(Instant referenceTime){
+        this.nextCheckAt = referenceTime.plusSeconds(this.intervalSeconds);
+    }
+
+    public Optional<MonitorStatus> applyCheckResult(boolean success, int failureThreshold){
+        if (success){
+            MonitorStatus previous = this.lastStatus;
+            this.consecutiveFailures = 0;
+            this.lastStatus = MonitorStatus.UP;
+
+            if(previous == MonitorStatus.DOWN){
+                return Optional.of(MonitorStatus.UP);
+            }
+            return Optional.empty();
+        }
+
+        this.consecutiveFailures++;
+
+        if(this.lastStatus != MonitorStatus.DOWN && this.consecutiveFailures >= failureThreshold){
+            this.lastStatus = MonitorStatus.DOWN;
+            return Optional.of(MonitorStatus.DOWN);
+        }
+
+        return Optional.empty();
     }
 
 }
