@@ -28,3 +28,10 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USER:guest}
     password: ${RABBITMQ_PASS:guest}
+
+  app:
+    monitor:
+      scheduler-enabled: true
+      fixed-delay-ms: 10000
+      batch-size: 50
+      failure-threshold: 2
