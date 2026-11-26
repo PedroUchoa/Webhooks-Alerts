@@ -1,8 +1,5 @@
-package com.pedro.WebHooksAlerts;
+package com.pedro.WebHooksAlerts.monitor;
 
-import com.pedro.WebHooksAlerts.monitor.HttpProbeClient;
-import com.pedro.WebHooksAlerts.monitor.MonitorCheckProcessor;
-import com.pedro.WebHooksAlerts.monitor.MonitorClaimService;
 import com.pedro.WebHooksAlerts.monitor.dtos.MonitorTarget;
 import com.pedro.WebHooksAlerts.monitor.dtos.ProbeResult;
 import lombok.RequiredArgsConstructor;
