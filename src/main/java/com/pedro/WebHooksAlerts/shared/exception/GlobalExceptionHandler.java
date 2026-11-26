@@ -44,4 +44,13 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public ProblemDetail handleConflict(ConflictException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("State Conflict");
+        problem.setType(URI.create("https://api.uptime-monitor.dev/errors/conflict"));
+        problem.setProperty("timestamp", Instant.now());
+        return problem;
+    }
+
 }
