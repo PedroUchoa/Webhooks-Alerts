@@ -35,3 +35,12 @@ spring:
       fixed-delay-ms: 10000
       batch-size: 50
       failure-threshold: 2
+    webhook:
+      max-attempts: 5
+      timeout-ms: 5000
+      jitter-factor: 0.15
+      retry-delays-ms:
+        - 60000
+        - 120000
+        - 240000
+        - 480000

@@ -48,6 +48,7 @@ public class MonitorCheckScheduler {
             checkProcessor.recordResult(target.id(),result);
         }catch (Exception ex){
             log.error("Error to Process The Monitor Verification {}", target.id(),ex);
+
         }
     }
 
