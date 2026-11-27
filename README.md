@@ -1,6 +1,5 @@
 # Uptime & Reliable Webhook Monitor
 
-![CI](https://github.com/PedroUchoa/uptime-webhook-monitor/actions/workflows/ci.yml/badge.svg)
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
@@ -22,32 +21,6 @@ A backend API uptime monitoring and event-driven webhook delivery engine built w
 - **Production-Grade Defaults:** Schema-first migrations with **Flyway** (`ddl-auto: validate`), RFC 7807 `ProblemDetail` error responses, OpenAPI/Swagger documentation, and automated E2E tests running on real containers.
 
 ---
-
-## Architecture
-
-```mermaid
-flowchart LR
-    API[REST API<br/>Monitors & Webhooks] --> DB[(PostgreSQL 16<br/>Flyway)]
-
-    subgraph Monitor Module
-        SCHED[Scheduler<br/>@Scheduled] -->|1. Claim batch<br/>SKIP LOCKED| DB
-        SCHED -->|2. Parallel HTTP<br/>Virtual Threads| TARGET[Monitored APIs]
-        TARGET -->|3. Save check &<br/>evaluate state| PROC[State Machine<br/>Processor]
-        PROC --> DB
-    end
-
-    PROC -.->|4. AFTER_COMMIT<br/>Domain Event| LISTENER[MonitorEventListener]
-
-    subgraph Webhook Module
-        LISTENER -->|5. Persist delivery &<br/>publish deliveryId| EX((RabbitMQ<br/>webhook.exchange))
-        EX --> DQ[webhook.delivery.queue]
-        DQ --> WORKER[Webhook Worker<br/>HMAC-SHA256 Signer]
-        WORKER -->|POST signed JSON| CLIENT[Client Callback URL]
-        WORKER -->|5xx / 429 / Timeout<br/>Backoff + Jitter| RQ[Retry Queues<br/>retry.1 .. retry.4<br/>TTL + DLX]
-        RQ -.->|TTL expired| EX
-        WORKER -->|4xx or Max Attempts| DLQ[webhook.dlq]
-    end
-```
 
 ### Modular Monolith Layout
 
@@ -86,8 +59,8 @@ src/main/java/com/uptime/
 ### Option 1: Run the Full Stack with Docker (1 Command)
 
 ```bash
-git clone [https://github.com/PedroUchoa/uptime-webhook-monitor.git](https://github.com/PedroUchoa/uptime-webhook-monitor.git)
-cd uptime-webhook-monitor
+git clone [https://github.com/PedroUchoa/Webhooks-Alerts]
+cd WebHooksAlerts
 docker compose up --build
 ```
 
