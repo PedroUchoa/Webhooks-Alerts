@@ -1,5 +1,6 @@
 package com.pedro.WebHooksAlerts.monitor;
 
+import com.pedro.WebHooksAlerts.monitor.dtos.CheckExecutionResponse;
 import com.pedro.WebHooksAlerts.monitor.dtos.CreateMonitorRequest;
 import com.pedro.WebHooksAlerts.monitor.dtos.MonitorResponse;
 import com.pedro.WebHooksAlerts.monitor.dtos.UpdateMonitorStatusRequest;
@@ -45,6 +46,12 @@ public class MonitorController {
     @Operation(summary = "Search For a Monitored URL By His Id")
     public ResponseEntity<MonitorResponse> findById(@PathVariable UUID id){
         return ResponseEntity.ok(monitorService.findById(id));
+    }
+
+    @GetMapping("/{id}/executions")
+    @Operation(summary = "List Last 50 executions and verifications from Monitor")
+    public ResponseEntity<List<CheckExecutionResponse>> findExecutions(@PathVariable UUID id){
+        return ResponseEntity.ok(monitorService.findRecentExecutions(id));
     }
 
     @PatchMapping("/{id}/status")

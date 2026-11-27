@@ -1,6 +1,7 @@
 package com.pedro.WebHooksAlerts.monitor;
 
 import com.pedro.WebHooksAlerts.monitor.dtos.ProbeResult;
+import jakarta.servlet.annotation.HttpConstraint;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -11,16 +12,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClient.Builder;
 
 @Component
 public class HttpProbeClient {
 
-    private final Builder restClientBuilder;
+    private final RestClient.Builder restClientBuilder;
 
     private final HttpClient sharedHttpClient;
 
-    HttpProbeClient(Builder restClientBuilder, HttpClient monitorJdkHttpClient){
+    HttpProbeClient(RestClient.Builder restClientBuilder, HttpClient monitorJdkHttpClient){
         this.restClientBuilder = restClientBuilder;
         this.sharedHttpClient = monitorJdkHttpClient;
     }

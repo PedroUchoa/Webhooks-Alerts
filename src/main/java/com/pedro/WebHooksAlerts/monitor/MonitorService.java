@@ -1,5 +1,6 @@
 package com.pedro.WebHooksAlerts.monitor;
 
+import com.pedro.WebHooksAlerts.monitor.dtos.CheckExecutionResponse;
 import com.pedro.WebHooksAlerts.monitor.dtos.CreateMonitorRequest;
 import com.pedro.WebHooksAlerts.monitor.dtos.MonitorResponse;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 public class MonitorService {
 
     private final MonitorRepository monitorRepository;
+    private final CheckExecutionRepository checkExecutionRepository;
 
     @Transactional
     public MonitorResponse create(CreateMonitorRequest request){
@@ -32,6 +34,14 @@ public class MonitorService {
     public MonitorResponse findById(UUID id){
         Monitor monitor = monitorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Monitor Not Found " + id));
         return MonitorResponse.from(monitor);
+    }
+
+    @Transactional
+    public List<CheckExecutionResponse> findRecentExecutions(UUID monitorId){
+        ensureExists(monitorId);
+        return checkExecutionRepository.
+                findTop50ByMonitorIdOrderByCheckedAtDesc(monitorId)
+                .stream().map(CheckExecutionResponse::from).toList();
     }
 
     @Transactional

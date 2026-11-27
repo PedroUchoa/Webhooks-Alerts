@@ -1,14 +1,15 @@
 package com.pedro.WebHooksAlerts.webhook;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pedro.WebHooksAlerts.monitor.MonitorStatus;
 import com.pedro.WebHooksAlerts.monitor.dtos.MonitorStatusChangedEvent;
 import com.pedro.WebHooksAlerts.webhook.dtos.WebHookPayload;
 import com.pedro.WebHooksAlerts.webhook.enums.WebhookEventType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,9 @@ public class WebHookDispatchService {
 
     private final WebHookSubscriptionRepository subscriptionRepository;
     private final WebHookDeliveryRepository deliveryRepository;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<UUID> createPendingDeliveries(MonitorStatusChangedEvent event){
         WebhookEventType eventType = mapEventType(event.newStatus());
         if (eventType == null) return List.of();
@@ -42,7 +43,8 @@ public class WebHookDispatchService {
         List<UUID> createdIds = new ArrayList<>();
         for (WebHookSubscription subscription:subscriptions){
             WebHookDelivery delivery = new WebHookDelivery(subscription,eventType,payloadJson);
-            createdIds.add(delivery.getId());
+            WebHookDelivery saved = deliveryRepository.saveAndFlush(delivery);
+            createdIds.add(saved.getId());
         }
         return createdIds;
     }
@@ -61,7 +63,7 @@ public class WebHookDispatchService {
         );
         try{
             return objectMapper.writeValueAsString(payload);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalStateException("Failed Trying To Serialize The Webhook Payload");
         }
 

@@ -42,7 +42,7 @@ public class WebHookSubscriptionService {
         monitorService.ensureExists(monitorId);
 
         WebHookSubscription subscription = subscriptionRepository.findById(webhookId)
-                .filter(sub->sub.getMonitorID().equals(monitorId))
+                .filter(sub->sub.getMonitorId().equals(monitorId))
                 .orElseThrow(()->new ResourceNotFoundException("Webhook Not Found" + webhookId));
 
         subscriptionRepository.delete(subscription);

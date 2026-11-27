@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "webhook_subscription")
+@Table(name = "webhook_subscriptions")
 @Getter
 @NoArgsConstructor
 public class WebHookSubscription {
@@ -21,7 +21,7 @@ public class WebHookSubscription {
     private UUID id;
 
     @Column(name = "monitor_id", nullable = false)
-    private UUID monitorID;
+    private UUID monitorId;
 
     @Column(name = "callback_url", nullable = false, length = 500)
     private String callbackUrl;
@@ -41,11 +41,11 @@ public class WebHookSubscription {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @Column(name = "create_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     public WebHookSubscription(UUID monitorID, String callbackUrl, String secretKey, Set<WebhookEventType> events){
-        this.monitorID = monitorID;
+        this.monitorId = monitorID;
         this.callbackUrl = callbackUrl;
         this.secretKey = secretKey;
         this.events = new HashSet<>(events);

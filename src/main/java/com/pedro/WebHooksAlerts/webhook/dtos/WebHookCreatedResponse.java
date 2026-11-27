@@ -20,7 +20,7 @@ public record WebHookCreatedResponse(
     public static WebHookCreatedResponse from(WebHookSubscription subscription){
         return new WebHookCreatedResponse(
                 subscription.getId(),
-                subscription.getMonitorID(),
+                subscription.getMonitorId(),
                 subscription.getCallbackUrl(),
                 subscription.getSecretKey(),
                 Set.copyOf(subscription.getEvents()),

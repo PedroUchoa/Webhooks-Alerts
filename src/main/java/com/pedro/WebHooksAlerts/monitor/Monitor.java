@@ -45,7 +45,7 @@ public class Monitor {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @Column(name = "created+at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     public Monitor(String name, String targetUrl, Integer intervalSeconds, Integer timeoutMs) {

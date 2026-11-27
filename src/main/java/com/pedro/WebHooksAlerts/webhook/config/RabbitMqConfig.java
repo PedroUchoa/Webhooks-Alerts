@@ -29,7 +29,7 @@ public class RabbitMqConfig {
                 .to(exchange)
                 .with(DELIVERY_ROUTING_KEY);
 
-        Queue dlq = QueueBuilder.durable(DELIVERY_QUEUE).build();
+        Queue dlq = QueueBuilder.durable(DLQ_QUEUE).build();
         Binding dlqBinding = BindingBuilder.bind(dlq)
                 .to(exchange)
                 .with(DLQ_ROUTING_KEY);
@@ -56,7 +56,7 @@ public class RabbitMqConfig {
                     .to(exchange)
                     .with(queueName);
 
-            declarable.add(retryBinding);
+            declarable.add(retryQueue);
             declarable.add(retryBinding);
         }
 

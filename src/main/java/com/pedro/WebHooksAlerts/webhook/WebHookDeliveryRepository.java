@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface WebHookDeliveryRepository extends JpaRepository<WebHookDelivery, UUID> {
 
-    @Query("SELECT d FROM WebhookDelivery d JOIN FETCH d.subscription WHERE d.id = :id")
+    @Query("SELECT d FROM WebHookDelivery d JOIN FETCH d.subscription WHERE d.id = :id")
     Optional<WebHookDelivery> findByIdWithSubscription(@Param("id") UUID id);
 
     List<WebHookDelivery> findTop50BySubscriptionMonitorIdOrderByCreatedAtDesc(UUID monitorId);

@@ -13,7 +13,7 @@ import java.util.HexFormat;
 @Component
 public class HmacSigner {
 
-    private static final String ALGORITHM = "HmacSha250";
+    private static final String ALGORITHM = "HmacSHA256";
     private static final String PREFIX = "sha256=";
     private static final HexFormat HEX_FORMAT = HexFormat.of();
 
